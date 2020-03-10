@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<meta charset="utf-8">
+	<title>Minhas tarefas - Prática 7</title>
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/css/mdb.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+</head>
+<body>
+	<nav class="navbar light-blue lighten-3">
+		<div class="container">
+			<h1 class="white-text">Minhas tarefas</h1>
+		</div>
+	</nav>
+
+	<section>
+		<div class="container">
+			<div class="row py-2">
+				<div class="col-xs-12 col-md-12">
+					<div class="container">
+						<form>
+							<div class="row">
+								<div class="col">
+									<div class="md-form">
+										<input id="tarefa" type="text" class="form-control" placeholder="Nova tarefa" required="required">
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-auto">
+									<button type="submit" class="btn btn-light-blue" id="adicionar">Adicionar</button>
+								</div>
+								<div class="col-md-auto">
+									<button type="submit" class="btn btn-red" id="remover">Limpar</button>
+								</div>
+							</div>
+					    </form>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-md-12">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-12">
+								<ul class="list-group" id="tarefas">
+								  <li class="list-group-item">Tarefa 1</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script>
+		var tarefa = document.getElementById("tarefa");
+		var tarefas = document.getElementById("tarefas");
+		var botao = document.getElementById("adicionar");
+		var remove = document.getElementById("remover");
+		var listaTarefas = [];
+
+		botao.addEventListener("click", function(event){
+   
+            event.preventDefault();
+            var valor = tarefa.value;
+            listaTarefas.push(valor); //colocar push, tirar pop
+            addLista(listaTarefas);
+            tarefa.value = '';
+		});
+		remove.addEventListener("click", function(event){
+   
+            event.preventDefault();
+         
+            if (confirm("Você irá remover todas as tarefas!") == true) {
+               var valor = tarefa.value;
+               listaTarefas.push(valor); //colocar push, tirar pop
+               removeLista(listaTarefas);
+               tarefa.value = '';
+            }
+            
+		});
+        function addLista(Lista){
+            var parsedList = JSON.stringify(Lista);
+            localStorage.setItem("lista", parsedList);
+            console.log("adicionando");
+            
+        }
+        function removeLista(Lista){
+        	var parsedList = JSON.stringify(Lista);
+        	localStorage.removeItem("lista", parsedList);
+        	console.log("removendo");
+        }
+		function iniciaLista(){
+			var verificaLista = localStorage.getItem("lista");
+			if (verificaLista != null) {
+				 listaTarefas = JSON.parse(verificaLista);
+				 
+				 listaTarefas.forEach(function(item){
+                      var li = document.createElement("li");
+				      li.classList.add("list-group-item");
+				      li.innerHTML = item;
+				      tarefas.appendChild(li);
+				 });
+
+			}else{
+				console.log("Lista vazia");
+			}
+		}
+
+		iniciaLista();
+ 	</script>
+</body>
+</html>
